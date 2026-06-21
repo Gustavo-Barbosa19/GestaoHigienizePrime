@@ -1,0 +1,27 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.log
+
+## Visual Studio
+.vs/
+*.sln.ide/
+**/.idea/
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## macOS
+.DS_Store
+
+## dotnet
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
