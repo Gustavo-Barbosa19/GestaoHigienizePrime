@@ -16,7 +16,10 @@ public class TipoServicoService : ITipoServicoService
         new() { Id = "4", Nome = "Higienização de Cadeiras", Ativo = true },
         new() { Id = "5", Nome = "Impermeabilização", Ativo = true },
         new() { Id = "6", Nome = "Limpeza de Tapetes", Ativo = true },
-        new() { Id = "7", Nome = "Limpeza de Carpetes", Ativo = true }
+        new() { Id = "7", Nome = "Limpeza de Carpetes", Ativo = true },
+        new() { Id = "8", Nome = "Higienização de Bancos (Automóvel)", Ativo = true },
+        new() { Id = "9", Nome = "Higienização Interna de Carro", Ativo = true },
+        new() { Id = "10", Nome = "Combo Bancos + Interna", Ativo = true }
     };
 
     public TipoServicoService(IGoogleSheetsService sheetsService)
