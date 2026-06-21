@@ -1,0 +1,74 @@
+@model List<Cliente>
+@{
+    ViewData["Title"] = "Clientes";
+}
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-people me-2"></i>Todos os Clientes</h6>
+        <a asp-action="Create" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Novo Cliente</a>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-12 col-md-8">
+                <div class="input-group">
+                    <input type="text" name="searchTerm" class="form-control" placeholder="Buscar por nome, telefone ou cidade..." value="@ViewBag.SearchTerm">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+            <div class="col-6 col-md-2">
+                <a asp-action="Index" class="btn btn-outline-secondary w-100">Limpar</a>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Cidade</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="5" class="text-center text-muted py-4">Nenhum cliente encontrado</td></tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none fw-medium">@item.Nome</a></td>
+                            <td>@item.Telefone</td>
+                            <td>@item.Email</td>
+                            <td>@item.Cidade</td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm" title="Detalhes"><i class="bi bi-eye"></i></a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm" title="Editar"><i class="bi bi-pencil"></i></a>
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Excluir este cliente?')">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Excluir"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav>
+                <ul class="pagination pagination-sm justify-content-center">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="?searchTerm=@ViewBag.SearchTerm&page=@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+        <small class="text-muted">Total: @ViewBag.TotalItems cliente(s)</small>
+    </div>
+</div>

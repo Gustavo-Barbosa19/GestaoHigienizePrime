@@ -1,0 +1,99 @@
+@model RelatorioViewModel
+@{
+    ViewData["Title"] = "Relatórios";
+}
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-bottom py-3">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-funnel me-2"></i>Filtros</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Filtrar" method="post" class="row g-3">
+            <div class="col-12 col-md-3">
+                <label class="form-label small fw-bold">Período</label>
+                <select name="Periodo" class="form-select">
+                    <option value="personalizado">Personalizado</option>
+                    <option value="dia">Hoje</option>
+                    <option value="semana">Últimos 7 dias</option>
+                    <option value="mes">Este mês</option>
+                    <option value="ano">Este ano</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-3">
+                <label class="form-label small fw-bold">Data Início</label>
+                <input name="DataInicio" class="form-control" type="date">
+            </div>
+            <div class="col-6 col-md-3">
+                <label class="form-label small fw-bold">Data Fim</label>
+                <input name="DataFim" class="form-control" type="date">
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="form-label small fw-bold">Cliente</label>
+                <select name="ClienteId" class="form-select">
+                    <option value="">Todos</option>
+                    @if (ViewBag.Clientes != null)
+                    {
+                        @foreach (var c in ViewBag.Clientes)
+                        {
+                            <option value="@c.Id">@c.Nome</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Filtrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model?.Servicos != null && Model.Servicos.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold"><i class="bi bi-file-text me-2"></i>Resultados</h6>
+            <div class="d-flex gap-2">
+                <a asp-action="ExportarPdf" asp-route-tipo="servicos" asp-route-inicio="@Model.DataInicio?.ToString("yyyy-MM-dd")" asp-route-fim="@Model.DataFim?.ToString("yyyy-MM-dd")" asp-route-clienteId="@Model.ClienteId" class="btn btn-danger btn-sm"><i class="bi bi-filetype-pdf"></i> PDF</a>
+                <a asp-action="ExportarExcel" asp-route-tipo="servicos" asp-route-inicio="@Model.DataInicio?.ToString("yyyy-MM-dd")" asp-route-fim="@Model.DataFim?.ToString("yyyy-MM-dd")" asp-route-clienteId="@Model.ClienteId" class="btn btn-success btn-sm"><i class="bi bi-filetype-xlsx"></i> Excel</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Servicos)
+                        {
+                            <tr>
+                                <td>@item.ClienteNome</td>
+                                <td>@item.DataAtendimento.ToString("dd/MM/yyyy")</td>
+                                <td>@item.TipoServico</td>
+                                <td>R$ @item.Valor.ToString("N2")</td>
+                                <td><span class="badge bg-primary">@item.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-light fw-bold">
+                            <td colspan="3" class="text-end">Total:</td>
+                            <td>R$ @Model.TotalReceitas.ToString("N2")</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <small class="text-muted">@Model.Servicos.Count serviço(s) encontrado(s)</small>
+        </div>
+    </div>
+}
+else if (Model?.Servicos != null)
+{
+    <div class="alert alert-info">Nenhum resultado encontrado para os filtros selecionados.</div>
+}

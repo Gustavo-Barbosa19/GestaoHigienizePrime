@@ -1,0 +1,94 @@
+@model List<Financeiro>
+@{
+    ViewData["Title"] = "Financeiro";
+}
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm bg-success text-white">
+            <div class="card-body">
+                <h6>Receitas</h6>
+                <h3 class="fw-bold">R$ @ViewBag.ReceitaTotal.ToString("N2")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm bg-danger text-white">
+            <div class="card-body">
+                <h6>Despesas</h6>
+                <h3 class="fw-bold">R$ @ViewBag.DespesaTotal.ToString("N2")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm @(ViewBag.Saldo >= 0 ? "bg-primary" : "bg-dark") text-white">
+            <div class="card-body">
+                <h6>Saldo</h6>
+                <h3 class="fw-bold">R$ @ViewBag.Saldo.ToString("N2")</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-cash-stack me-2"></i>Transações</h6>
+        <a asp-action="Create" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nova Transação</a>
+    </div>
+    <div class="card-body">
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <a asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(ViewBag.Tipo) ? "btn-primary" : "btn-outline-secondary")">Todas</a>
+            <a asp-action="Index" asp-route-tipo="Entrada" class="btn btn-sm @(ViewBag.Tipo == "Entrada" ? "btn-primary" : "btn-outline-secondary")">Receitas</a>
+            <a asp-action="Index" asp-route-tipo="Saida" class="btn btn-sm @(ViewBag.Tipo == "Saida" ? "btn-primary" : "btn-outline-secondary")">Despesas</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Data</th>
+                        <th>Tipo</th>
+                        <th>Categoria</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="6" class="text-center text-muted py-4">Nenhuma transação encontrada</td></tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Data.ToString("dd/MM/yyyy")</td>
+                            <td><span class="badge @(item.Tipo == TipoTransacao.Entrada ? "bg-success" : "bg-danger")">@item.Tipo</span></td>
+                            <td>@item.Categoria</td>
+                            <td>@item.Descricao</td>
+                            <td class="fw-bold @(item.Tipo == TipoTransacao.Entrada ? "text-success" : "text-danger")">R$ @item.Valor.ToString("N2")</td>
+                            <td class="text-end">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm" title="Editar"><i class="bi bi-pencil"></i></a>
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Excluir transação?')">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Excluir"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav>
+                <ul class="pagination pagination-sm justify-content-center">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="?tipo=@ViewBag.Tipo&page=@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+        <small class="text-muted">Total: @ViewBag.TotalItems transação(ões)</small>
+    </div>
+</div>

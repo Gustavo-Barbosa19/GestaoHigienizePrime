@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\GestaoHigienizePrime\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\GestaoHigienizePrime\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.GestaoHigienizePrime.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.GestaoHigienizePrime.props",
+      "PackagePath": "build\\GestaoHigienizePrime.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.GestaoHigienizePrime.props",
+      "PackagePath": "buildMultiTargeting\\GestaoHigienizePrime.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.GestaoHigienizePrime.props",
+      "PackagePath": "buildTransitive\\GestaoHigienizePrime.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

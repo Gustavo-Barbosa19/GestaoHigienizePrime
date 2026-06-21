@@ -1,0 +1,49 @@
+@model Servico
+@{
+    ViewData["Title"] = "Detalhes da OS";
+}
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold">Ordem de Serviço #@Model.Id?.Substring(0, 8)</h6>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</a>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Voltar</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-12 col-md-6">
+                <h6 class="text-muted small text-uppercase">Informações do Serviço</h6>
+                <hr class="mt-1">
+                <p><strong>Cliente:</strong> @Model.ClienteNome</p>
+                <p><strong>Data:</strong> @Model.DataAtendimento.ToString("dd/MM/yyyy")</p>
+                <p><strong>Horário:</strong> @Model.Horario</p>
+                <p><strong>Tipo:</strong> @Model.TipoServico</p>
+                <p><strong>Qtd Itens:</strong> @Model.QuantidadeItens</p>
+            </div>
+            <div class="col-12 col-md-6">
+                <h6 class="text-muted small text-uppercase">Valores e Status</h6>
+                <hr class="mt-1">
+                <p><strong>Valor:</strong> R$ @Model.Valor.ToString("N2")</p>
+                <p><strong>Forma Pagamento:</strong> @Model.FormaPagamento</p>
+                <p><strong>Status:</strong>
+                    <span class="badge @(Model.Status == StatusServico.Finalizado ? "bg-success" :
+                        Model.Status == StatusServico.Cancelado ? "bg-danger" :
+                        Model.Status == StatusServico.EmAndamento ? "bg-warning text-dark" :
+                        Model.Status == StatusServico.Confirmado ? "bg-info" : "bg-secondary")">
+                        @Model.Status
+                    </span>
+                </p>
+                <p class="small text-muted">Criado em: @Model.DataCriacao.ToString("dd/MM/yyyy HH:mm")</p>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Observacoes))
+            {
+                <div class="col-12">
+                    <h6 class="text-muted small text-uppercase">Observações</h6>
+                    <hr class="mt-1">
+                    <p>@Model.Observacoes</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

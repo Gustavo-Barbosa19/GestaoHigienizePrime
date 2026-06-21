@@ -1,0 +1,44 @@
+@model Cliente
+@{
+    ViewData["Title"] = "Detalhes do Cliente";
+}
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold"><i class="bi bi-person-circle me-2"></i>@Model.Nome</h6>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Editar</a>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Voltar</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-12 col-md-6">
+                <h6 class="text-muted small text-uppercase">Informações Pessoais</h6>
+                <hr class="mt-1">
+                <p><strong>Nome:</strong> @Model.Nome</p>
+                <p><strong>Telefone:</strong> @Model.Telefone</p>
+                <p><strong>WhatsApp:</strong> @Model.WhatsApp</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+            </div>
+            <div class="col-12 col-md-6">
+                <h6 class="text-muted small text-uppercase">Endereço</h6>
+                <hr class="mt-1">
+                <p><strong>CEP:</strong> @Model.CEP</p>
+                <p><strong>Endereço:</strong> @Model.Endereco, @Model.Numero</p>
+                <p><strong>Bairro:</strong> @Model.Bairro</p>
+                <p><strong>Cidade/Estado:</strong> @Model.Cidade - @Model.Estado</p>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Observacoes))
+            {
+                <div class="col-12">
+                    <h6 class="text-muted small text-uppercase">Observações</h6>
+                    <hr class="mt-1">
+                    <p>@Model.Observacoes</p>
+                </div>
+            }
+            <div class="col-12">
+                <p class="small text-muted">Cadastrado em: @Model.DataCadastro.ToString("dd/MM/yyyy HH:mm")</p>
+            </div>
+        </div>
+    </div>
+</div>

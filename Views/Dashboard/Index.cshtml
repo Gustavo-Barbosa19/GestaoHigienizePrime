@@ -1,0 +1,165 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Total Clientes</h6>
+                        <h2 class="fw-bold mb-0">@Model.TotalClientes</h2>
+                    </div>
+                    <div class="icon-box bg-primary-subtle">
+                        <i class="bi bi-people text-primary fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">Clientes cadastrados</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Serviços Realizados</h6>
+                        <h2 class="fw-bold mb-0">@Model.TotalServicos</h2>
+                    </div>
+                    <div class="icon-box bg-success-subtle">
+                        <i class="bi bi-check-circle text-success fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">Total de serviços</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Agendados</h6>
+                        <h2 class="fw-bold mb-0">@Model.ServicosAgendados</h2>
+                    </div>
+                    <div class="icon-box bg-warning-subtle">
+                        <i class="bi bi-calendar-event text-warning fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">Aguardando atendimento</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Faturamento Mês</h6>
+                        <h2 class="fw-bold mb-0 text-success">R$ @Model.FaturamentoMes.ToString("N2")</h2>
+                    </div>
+                    <div class="icon-box bg-info-subtle">
+                        <i class="bi bi-graph-up-arrow text-info fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">Receita do mês atual</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-xl-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2"></i>Últimos Atendimentos</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.UltimosAtendimentos.Any())
+                            {
+                                <tr><td colspan="5" class="text-center text-muted py-4">Nenhum atendimento registrado</td></tr>
+                            }
+                            @foreach (var item in Model.UltimosAtendimentos)
+                            {
+                                <tr>
+                                    <td>@item.ClienteNome</td>
+                                    <td>@item.DataAtendimento.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.TipoServico</td>
+                                    <td>R$ @item.Valor.ToString("N2")</td>
+                                    <td>
+                                        <span class="badge @(item.Status == StatusServico.Finalizado ? "bg-success" :
+                                            item.Status == StatusServico.Cancelado ? "bg-danger" :
+                                            item.Status == StatusServico.EmAndamento ? "bg-warning text-dark" :
+                                            item.Status == StatusServico.Confirmado ? "bg-info" : "bg-secondary")">
+                                            @item.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-4">
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header bg-white border-bottom py-3">
+                <h6 class="mb-0 fw-bold"><i class="bi bi-pie-chart me-2"></i>Financeiro</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <small class="text-muted">Receita Mensal</small>
+                    <h5 class="text-success fw-bold">R$ @Model.ReceitaMensal.ToString("N2")</h5>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted">Despesa Mensal</small>
+                    <h5 class="text-danger fw-bold">R$ @Model.DespesaMensal.ToString("N2")</h5>
+                </div>
+                <hr>
+                <div>
+                    <small class="text-muted">Faturamento Anual</small>
+                    <h4 class="text-primary fw-bold">R$ @Model.FaturamentoAnual.ToString("N2")</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const ctx = document.getElementById('chartFaturamento');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                    datasets: [{
+                        label: 'Faturamento',
+                        data: @Json.Serialize(Model.ServicosPorMes.Select(s => s.Valor)),
+                        backgroundColor: '#0d6efd',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+    </script>
+}
