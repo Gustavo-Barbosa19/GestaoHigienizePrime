@@ -34,6 +34,7 @@ function handleRequest(e) {
         break;
       case 'getById':
         result = getById(sheetObj, params.id || postData.id);
+        result = result ? [result] : [];
         break;
       case 'insert':
         result = insertData(sheetObj, postData.data || params);
